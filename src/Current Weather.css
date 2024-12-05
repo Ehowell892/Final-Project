@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.currentTemp {
+    font-size: 54pt;
+}
+.feelslike {
+    font-size: 18pt;
+}
+.conditions {
+    font-size: 25pt;
+}
+.icon {
+    font-size: 10pt;
+}
