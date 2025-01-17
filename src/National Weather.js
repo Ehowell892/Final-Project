@@ -62,6 +62,9 @@ function NationalWeather() {
     }
   };
 
+  const onTempClick = () => {
+    window.location.href= '/temphistory';
+  }
   const handleChange = (event) => {
     const value = event.target.value;
     console.log(value);
@@ -107,6 +110,10 @@ function NationalWeather() {
             </div>
           </>
         )}
+      </div>
+      <div>
+        <button onClick={onTempClick}>Temperature History</button>
+
       </div>
     </div >
   );

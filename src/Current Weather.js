@@ -14,7 +14,9 @@ import ChanceOfRain from "./ChanceOfRain.js";
 import WindSpeed from "./WindSpeed.js";
 function CurrentWeather() {
         const { zipcode } = useParams();
+        const [added, setAdded] = useState(false);
         const [weatherData, setWeatherData] = useState(null);
+        const [newTemp, setNewTemp] = useState({ zipcode: "", temp: "" });
         const currentDate = new Date();
         const apiURL = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/' + zipcode + '?unitGroup=us&key=XYWVVUWC8UNLW3JH6DUJZ63DW&contentType=json&options=usermote';
         useEffect(() => {
@@ -32,6 +34,20 @@ function CurrentWeather() {
                 };
                 getWeatherData();
         }, [apiURL]);
+        const addTempHistory = () => {
+                if (added === false) {
+                        setAdded(true);
+                        console.log("ADDED");
+                        const tempData = {
+                                temp: weatherData.currentConditions.temp,
+                                zipcode: parseInt(zipcode)
+                        };
+                        fetch("http://localhost:3001/temps", {
+                                method: "POST", headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(tempData)
+                        })
+                }
+        }
         if (!weatherData) return <p>Loading weather data for {zipcode}</p>;
         return (
                 <div>
@@ -47,12 +63,12 @@ function CurrentWeather() {
                         <div className="chanceofrain"><ChanceOfRain temps={weatherData.currentConditions.precipprob} /></div>
                         <div className="windspeed"><WindSpeed windspeed={weatherData.currentConditions.windspeed} /></div>
                         <span className="text-4xl">Future Forecast</span>
-                        <div className="grid grid-cols-8 gap-2">
-                                {weatherData.days.slice(0, 8).map(currentday => (
+                        <div className="grid grid-cols-7 gap-2">
+                                {weatherData.days.slice(1, 8).map(currentday => (
                                         <Day day={currentday} />
                                 ))}
                         </div>
-
+                        {addTempHistory()}
                 </div>
         );
 }
